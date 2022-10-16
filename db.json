@@ -1,0 +1,37 @@
+{
+  "invoices": [
+    {
+      "id": 1,
+      "title": "First",
+      "clientId": "1",
+      "items": [
+        {
+          "id": 1,
+          "text": "Mele",
+          "price": 20
+        },
+        {
+          "id": 2,
+          "text": "Pere",
+          "price": 10
+        }
+      ]
+    },
+    {
+      "title": "Second",
+      "clientId": "1",
+      "items": [],
+      "id": 2
+    }
+  ],
+  "clients": [
+    {
+      "id": 1,
+      "name": "Michele"
+    },
+    {
+      "id": 2,
+      "name": "Fabio"
+    }
+  ]
+}
