@@ -9,11 +9,17 @@ export interface InvoiceProps {
   onUpdate: () => void;
 }
 
+export interface formData {
+  invoice: InvoiceInfo | null;
+  clients: Client[]
+}
+
 export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
 
   const [invoice, setInvoice] = useState<InvoiceInfo | null>(null);
   const [clients, setClients] = useState<Client[]>([]);
   const [isSubmitted, setIsSubmitted] = useState<boolean>(false);
+  const [formData, setFormData] = useState<formData | null>(null);
 
   const addItem = () => {
     setInvoice({
@@ -80,8 +86,10 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
   }
 
   const resetInvoice = () => {
-    setInvoice(invoice);
-    setClients(clients);
+    setFormData({
+      invoice: invoice,
+      clients: clients
+    })
   }
 
   const total = invoice?.items.reduce((tot, item) => tot + item.price, 0) || 0;
@@ -99,33 +107,37 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
     ]).then(([invoice, clients]) => {
       setInvoice(invoice);
       setClients(clients);
+      setFormData({
+        invoice: invoice,
+        clients: clients
+      })
     });
 
     return () => controller.abort();
   }, [invoiceId])
 
-  return !invoice ? <p>Loading...</p> : <form noValidate onSubmit={onSubmit} className={isSubmitted ? "was-validated" : ""}>
+  return !formData ? <p>Loading...</p> : <form noValidate onSubmit={onSubmit} className={isSubmitted ? "was-validated" : ""}>
     <h3 className="mt-3">Invoice</h3>
     <input
       type="text" placeholder="Title" className={`form-control w-100`}
       name="title"
-      value={invoice.title}
+      value={formData.invoice?.title}
       onChange={e => setField(e.target.name, e.target.value)}
       required
     />
     <select 
       name="clientId" className="form-select mt-2"
-      value={invoice.clientId || ''}
+      value={formData.invoice?.clientId || ''}
       onChange={e => setField(e.target.name, e.target.value)}
       required
     >
       <option value="">Select a client</option>
-      {clients.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
+      {formData.clients?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
     </select>
 
     <h5 className="mt-3">Items</h5>
     <button type="button" className="btn btn-success btn-sm mb-2" onClick={addItem}>Add</button>
-    {invoice?.items.map((item, i) =>
+    {formData.invoice?.items.map((item, i) =>
       <div className="mb-1 input-group" key={item.id}>
         <input className="form-control" type="text" placeholder="Item" value={item.text} onChange={e => setItemTitle(i, e.target.value)} required />
         <input className="form-control" type="number" placeholder="Price" value={item.price} onChange={e => setItemPrice(i, +e.target.value)} />
