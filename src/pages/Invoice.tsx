@@ -79,6 +79,11 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
     })
   }
 
+  const resetInvoice = () => {
+    setInvoice(invoice);
+    setClients(clients);
+  }
+
   const total = invoice?.items.reduce((tot, item) => tot + item.price, 0) || 0;
  
   useEffect(() => {
@@ -130,5 +135,6 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
     <h6 className="mt-3">Total: €{total}</h6>
     <button type="submit" className="btn btn-primary m-2 d-inline-block">Save</button>
     <button type="button" className="btn btn-danger m-2 d-inline-block" onClick={deleteInvoice}>Delete</button>
+    <button type="button" className="btn btn-warning m-2 d-inline-block" onClick={resetInvoice}>Discard changes</button>
   </form>;
 }

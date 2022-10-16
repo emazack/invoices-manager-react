@@ -1,6 +1,8 @@
 # invoices-manager-react
 React Academy invoices manager made in react with vite.
 
+Use npm run json-server to start the server and npm run dev to start the client. Visit localhost:5173 to see the application running.
+
 ## Goal
 
 - Implement the "Discard changes" functionality
