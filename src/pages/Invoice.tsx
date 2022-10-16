@@ -57,7 +57,7 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
 
   const setField = (field: string, value: any) => {
     setInvoice({
-      ...invoice!,
+      ...formData?.invoice!,
       [field]: value
     });
   }
@@ -86,14 +86,12 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
   }
 
   const resetInvoice = () => {
-    setFormData({
-      invoice: invoice,
-      clients: clients
-    })
+    setInvoice(formData?.invoice!);
+    setClients(formData?.clients!);
   }
 
   const total = invoice?.items.reduce((tot, item) => tot + item.price, 0) || 0;
- 
+
   useEffect(() => {
     setInvoice(null);
     setIsSubmitted(false);
@@ -116,28 +114,28 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
     return () => controller.abort();
   }, [invoiceId])
 
-  return !formData ? <p>Loading...</p> : <form noValidate onSubmit={onSubmit} className={isSubmitted ? "was-validated" : ""}>
+  return !invoice ? <p>Loading...</p> : <form noValidate onSubmit={onSubmit} className={isSubmitted ? "was-validated" : ""}>
     <h3 className="mt-3">Invoice</h3>
     <input
       type="text" placeholder="Title" className={`form-control w-100`}
       name="title"
-      value={formData.invoice?.title}
+      value={invoice?.title}
       onChange={e => setField(e.target.name, e.target.value)}
       required
     />
-    <select 
+    <select
       name="clientId" className="form-select mt-2"
-      value={formData.invoice?.clientId || ''}
+      value={invoice?.clientId || ''}
       onChange={e => setField(e.target.name, e.target.value)}
       required
     >
       <option value="">Select a client</option>
-      {formData.clients?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
+      {clients?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
     </select>
 
     <h5 className="mt-3">Items</h5>
     <button type="button" className="btn btn-success btn-sm mb-2" onClick={addItem}>Add</button>
-    {formData.invoice?.items.map((item, i) =>
+    {invoice?.items.map((item, i) =>
       <div className="mb-1 input-group" key={item.id}>
         <input className="form-control" type="text" placeholder="Item" value={item.text} onChange={e => setItemTitle(i, e.target.value)} required />
         <input className="form-control" type="number" placeholder="Price" value={item.price} onChange={e => setItemPrice(i, +e.target.value)} />
