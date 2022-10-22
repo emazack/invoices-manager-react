@@ -20,7 +20,13 @@
     {
       "title": "Second",
       "clientId": "1",
-      "items": [],
+      "items": [
+        {
+          "id": 0.9856779940547695,
+          "text": "asd",
+          "price": 0
+        }
+      ],
       "id": 2
     },
     {
@@ -28,6 +34,12 @@
       "clientId": "1",
       "items": [],
       "id": 3
+    },
+    {
+      "title": "New invoice",
+      "clientId": "",
+      "items": [],
+      "id": 4
     }
   ],
   "clients": [

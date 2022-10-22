@@ -116,22 +116,33 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
 
   return !invoice ? <p>Loading...</p> : <form noValidate onSubmit={onSubmit} className={isSubmitted ? "was-validated" : ""}>
     <h3 className="mt-3">Invoice</h3>
-    <input
-      type="text" placeholder="Title" className={`form-control w-100`}
-      name="title"
-      value={invoice?.title}
-      onChange={e => setField(e.target.name, e.target.value)}
-      required
-    />
-    <select
-      name="clientId" className="form-select mt-2"
-      value={invoice?.clientId || ''}
-      onChange={e => setField(e.target.name, e.target.value)}
-      required
-    >
-      <option value="">Select a client</option>
-      {clients?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
-    </select>
+    <div className='col-md-6'>
+      <input
+        type="text" placeholder="Title" className={`form-control w-100`}
+        name="title"
+        value={invoice?.title}
+        onChange={e => setField(e.target.name, e.target.value)}
+        required
+        minLength={3}
+      />
+      <div className="invalid-feedback">
+        Please choose a title.
+      </div>
+    </div>
+    <div className='col-md-6'>
+      <select
+        name="clientId" className="form-select mt-2"
+        value={invoice?.clientId || ''}
+        onChange={e => setField(e.target.name, e.target.value)}
+        required
+      >
+        <option value="">Select a client</option>
+        {clients?.map(({ id, name }) => <option key={id} value={id}>{name}</option>)}
+      </select>
+      <div className="invalid-feedback">
+        Please choose a Client.
+      </div>
+    </div>
 
     <h5 className="mt-3">Items</h5>
     <button type="button" className="btn btn-success btn-sm mb-2" onClick={addItem}>Add</button>
@@ -139,6 +150,9 @@ export function Invoice({ invoiceId, onDelete, onUpdate }: InvoiceProps) {
       <div className="mb-1 input-group" key={item.id}>
         <input className="form-control" type="text" placeholder="Item" value={item.text} onChange={e => setItemTitle(i, e.target.value)} required />
         <input className="form-control" type="number" placeholder="Price" value={item.price} onChange={e => setItemPrice(i, +e.target.value)} />
+        <div className="invalid-feedback">
+            Please choose a Name.
+        </div>
         <button type="button" className="btn btn-danger" onClick={() => removeItem(i)}>Remove</button>
       </div>
     )}
